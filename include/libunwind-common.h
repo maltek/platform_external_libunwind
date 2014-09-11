@@ -27,6 +27,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
 #include <sys/types.h>
 /* End of ANDROID update. */
 
+#undef _U
+#undef _UL
+
 #define UNW_VERSION_MAJOR	1
 #define UNW_VERSION_MINOR	1
 #define UNW_VERSION_EXTRA	

@@ -68,8 +68,8 @@ generate_arches := arm arm64 mips x86 x86_64
 # variables.
 libunwind_arches := $(generate_arches) mips64
 
-$(foreach arch,$(generate_arches), \
-  $(eval common_c_includes_$(arch) := $(LOCAL_PATH)/include/tdep-$(arch)))
+common_c_includes += $(LOCAL_PATH)/include/tdep-$(arch)
+
 
 #-----------------------------------------------------------------------
 # libunwind shared library
@@ -127,10 +127,7 @@ libunwind_src_files := \
 	src/os-common.c \
 	src/os-linux.c \
 	src/Los-common.c \
-
-# Arch specific source files.
-$(foreach arch,$(generate_arches), \
-  $(eval libunwind_src_files_$(arch) += \
+	src/dl-iterate-phdr.c \
 	src/$(arch)/is_fpreg.c \
 	src/$(arch)/regname.c \
 	src/$(arch)/Gcreate_addr_space.c \
@@ -153,7 +150,6 @@ $(foreach arch,$(generate_arches), \
 	src/$(arch)/Lregs.c \
 	src/$(arch)/Lresume.c \
 	src/$(arch)/Lstep.c \
-	))
 
 libunwind_src_files_arm += \
 	src/arm/getcontext.S \
@@ -203,6 +199,8 @@ libunwind_src_files_arm   += src/elf32.c
 libunwind_src_files_mips  += src/elf32.c
 libunwind_src_files_x86   += src/elf32.c
 
+libunwind_src_files += $(libunwind_src_files_$(arch))
+
 libunwind_shared_libraries_target := \
 	libdl \
 
@@ -224,13 +222,13 @@ module_tag := optional
 build_type := target
 build_target := SHARED_LIBRARY
 include $(LOCAL_PATH)/Android.build.mk
-build_type := host
-include $(LOCAL_PATH)/Android.build.mk
-build_type := target
-build_target := STATIC_LIBRARY
-include $(LOCAL_PATH)/Android.build.mk
-build_type := host
-include $(LOCAL_PATH)/Android.build.mk
+#build_type := host
+#include $(LOCAL_PATH)/Android.build.mk
+#build_type := target
+#build_target := STATIC_LIBRARY
+#include $(LOCAL_PATH)/Android.build.mk
+#build_type := host
+#include $(LOCAL_PATH)/Android.build.mk
 
 #-----------------------------------------------------------------------
 # libunwind-ptrace shared library

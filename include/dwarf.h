@@ -48,6 +48,7 @@ struct elf_image;
   #else
     #error Could not find <link.h>
   #endif
+  #include "dl-iterate-phdr.h"
 #endif
 
 #include <pthread.h>
